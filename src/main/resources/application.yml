@@ -9,4 +9,4 @@ api:
       client_id: 'f9ba78ba-29bd-4acd-b327-23ba7231e867'
       client_secret: 'bc9e230c-7376-4d2d-8e59-42de877ce289'
       scope: 'crm.objects.contacts.write&20crm.objects.contacts.read'
-      appId: '9229340'
+    appId: '9229340'

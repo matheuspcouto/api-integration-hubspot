@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -43,7 +44,8 @@ public class ContactService {
         return response.getBody();
     }
 
-    public void createContact(ContactCreateDtoRequest contactCreateDtoRequest) throws ServiceUnavailableException {
+    public void createContact(ContactCreateDtoRequest request) throws ServiceUnavailableException {
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization", "Bearer " + tokenService.getAccessToken());
@@ -62,16 +64,14 @@ public class ContactService {
         List<Association> associations = new ArrayList<>();
         associations.add(association);
 
-        contactCreateDtoRequest.setAssociations(associations);
+        request.setAssociations(associations);
 
-        HttpEntity entity = new HttpEntity(contactCreateDtoRequest, headers);
-        ResponseEntity<String> response = new RestTemplate().exchange(
+        HttpEntity entity = new HttpEntity(request, headers);
+        new RestTemplate().exchange(
                 getUrlContacts(),
                 HttpMethod.POST,
                 entity,
                 String.class
         );
-
-        //return response.getBody();
     }
 }

@@ -1,6 +1,5 @@
 package com.api.integration.hubspot.handler;
 
-import com.api.integration.hubspot.enums.HttpErrors;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +16,9 @@ public class ApiError {
 
     private String url;
 
-    public ApiError(Integer code, String message, String url) {
+    public ApiError(String message, String url) {
         this.timestamp = LocalDateTime.now();
         this.url = url;
-        this.message = !message.isEmpty() ? message : HttpErrors.getMessageByCode(code);
+        this.message = message;
     }
 }

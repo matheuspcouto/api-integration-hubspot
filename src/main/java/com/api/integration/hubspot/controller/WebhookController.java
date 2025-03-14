@@ -19,9 +19,9 @@ public class WebhookController implements WebhookClient {
     private WebhookService webhookService;
 
     @Override
-    public String updateWebhooksSettings(UpdateWebhookSettingsDtoRequest updateWebhookSettingsDtoRequest) {
+    public String updateWebhooksSettings(UpdateWebhookSettingsDtoRequest request) {
         log.info("Updating webhooks settings...");
-        String response = webhookService.updateWebhookUrl(updateWebhookSettingsDtoRequest);
+        String response = webhookService.updateWebhookUrl(request);
         log.info("Webhooks settings updated successfully.");
         return response;
     }

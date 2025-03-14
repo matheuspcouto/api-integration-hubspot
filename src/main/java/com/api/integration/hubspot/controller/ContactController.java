@@ -8,7 +8,6 @@ import com.api.integration.hubspot.service.ContactService;
 import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,13 +40,13 @@ public class ContactController implements ContactClient {
     }
 
     @Override
-    public void createContact(ContactCreateDtoRequest contactCreateDtoRequest) {
+    public String createContact(ContactCreateDtoRequest request) {
         log.info("Criando contato no HubSpot...");
 
         if (bucket.tryConsume(1)) {
-            contactService.createContact(contactCreateDtoRequest);
+            contactService.createContact(request);
             log.info("Contato criado com sucesso no HubSpot");
-            ;
+            return "Contato criado com sucesso no HubSpot";
         }
         throw new RateLimitsException("Limite de requisições excedido. Aguarde um minuto para continuar.");
     }

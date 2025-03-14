@@ -16,7 +16,7 @@ public class WebhookService {
     @Value(value = "${api.hubspot.webhook_url}")
     private String webhookUrl;
 
-    @Value(value = "${api.hubspot.auth.appId}")
+    @Value(value = "${api.hubspot.appId}")
     private String appId;
 
     public String updateWebhookUrl(UpdateWebhookSettingsDtoRequest updateWebhookSettingsDtoRequest) throws ServiceUnavailableException {

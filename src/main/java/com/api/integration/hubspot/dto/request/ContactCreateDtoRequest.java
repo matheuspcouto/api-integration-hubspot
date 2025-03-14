@@ -3,6 +3,7 @@ package com.api.integration.hubspot.dto.request;
 import com.api.integration.hubspot.models.Association;
 import com.api.integration.hubspot.models.Properties;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,10 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class ContactCreateDtoRequest {
-    //TODO: Estudar e verificar se esse campo é necessário
     @JsonIgnore
     private List<Association> associations;
 
     @NotNull
+    @Valid
     private Properties properties;
 }

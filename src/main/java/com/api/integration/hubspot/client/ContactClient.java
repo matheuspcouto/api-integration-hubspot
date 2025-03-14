@@ -25,8 +25,8 @@ public interface ContactClient {
     @PostMapping("/create")
     @Operation(summary = "Criar um novo contato", description = "Cria um novo contato no HubSpot. " +
             "É necessário informar o token de autorização recebido no 1° passo.")
-    @ApiResponse(responseCode = "200", description = "Success", content = @Content(mediaType = "application/json"))
-    void createContact(
+    @ApiResponse(responseCode = "200", description = "Success", content = @Content)
+    String createContact(
             @RequestBody @Valid ContactCreateDtoRequest contactCreateDtoRequest
     );
 }

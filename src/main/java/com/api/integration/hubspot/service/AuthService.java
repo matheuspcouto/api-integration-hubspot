@@ -23,20 +23,16 @@ public class AuthService {
     @Value(value = "${api.hubspot.url}")
     private String apiUrl;
 
-    @Value(value = "${api.hubspot.auth.redirect_uri}")
-    private String redirectUri;
-
     @Autowired
     private TokenService tokenService;
 
-    AuthTokenDtoRequest authTokenRequest = new AuthTokenDtoRequest();
+    @Autowired
+    AuthTokenDtoRequest authTokenRequest;
 
-    public String getAuthorizationCode(AuthTokenDtoRequest request) throws ServiceUnavailableException {
-        authTokenRequest = new AuthTokenDtoRequest(request.getClientId(), request.getClientSecret(), request.getScope());
-
+    public String getAutenticationUrl() throws ServiceUnavailableException {
         String url = getAuthUrl() + "/authorize";
         url += "?client_id=" + authTokenRequest.getClientId();
-        url += "&redirect_uri=" + getRedirectUri();
+        url += "&redirect_uri=" + authTokenRequest.getRedirectUri();
         url += "&scope=" + authTokenRequest.getScope();
 
         return url;
@@ -56,7 +52,7 @@ public class AuthService {
                 code,
                 authTokenRequest.getClientId(),
                 authTokenRequest.getClientSecret(),
-                getRedirectUri()
+                authTokenRequest.getRedirectUri()
         );
 
         HttpEntity<String> request = new HttpEntity<>(formParameters, headers);
