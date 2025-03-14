@@ -26,7 +26,6 @@ public class ContactController implements ContactClient {
 
     private final Bucket rateLimitBucket ;
 
-    // TODO: Explicar que colou aqui pq não sabia se a regra é para todas as request ou somente essa request
     public ContactController() {
         Bandwidth limit = Bandwidth.classic(110, Refill.greedy(110, Duration.ofSeconds(10)));
         this.rateLimitBucket = Bucket.builder().addLimit(limit).build();
