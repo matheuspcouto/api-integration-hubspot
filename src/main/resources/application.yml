@@ -2,7 +2,9 @@ api:
   hubspot:
     url: 'https://api.hubapi.com'
     contacts_url: 'https://api.hubapi.com/crm/v3/objects/contacts'
-    webhook_url: 'https://api.hubapi.com/webhooks/v3'
+    webhook:
+      url: 'https://api.hubapi.com/webhooks/v3'
+      target_url: 'http://localhost:8080/webhook/contacts'
     auth:
       url: 'https://app.hubspot.com/oauth'
       redirect_uri: 'http://localhost:8080/oauth-callback'

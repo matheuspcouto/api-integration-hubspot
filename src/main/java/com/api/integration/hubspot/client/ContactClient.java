@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Contact - 2° Passo", description = "API de Contatos")
@@ -26,7 +27,7 @@ public interface ContactClient {
     @Operation(summary = "Criar um novo contato", description = "Cria um novo contato no HubSpot. " +
             "É necessário informar o token de autorização recebido no 1° passo.")
     @ApiResponse(responseCode = "200", description = "Success", content = @Content)
-    String createContact(
+    ResponseEntity<String> createContact(
             @RequestBody @Valid ContactCreateDtoRequest contactCreateDtoRequest
     );
 }

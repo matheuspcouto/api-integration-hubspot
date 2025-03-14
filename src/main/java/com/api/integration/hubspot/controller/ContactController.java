@@ -10,7 +10,7 @@ import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Refill;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,17 +18,18 @@ import java.time.Duration;
 
 @Slf4j
 @RestController
-@RequestMapping("/contacts")
+@RequestMapping("/api/v1/contacts")
 public class ContactController implements ContactClient {
 
     @Autowired
     private ContactService contactService;
 
-    private final Bucket bucket;
+    private final Bucket rateLimitBucket ;
 
+    // TODO: Explicar que colou aqui pq não sabia se a regra é para todas as request ou somente essa request
     public ContactController() {
         Bandwidth limit = Bandwidth.classic(110, Refill.greedy(110, Duration.ofSeconds(10)));
-        this.bucket = Bucket.builder().addLimit(limit).build();
+        this.rateLimitBucket = Bucket.builder().addLimit(limit).build();
     }
 
     @Override
@@ -40,14 +41,17 @@ public class ContactController implements ContactClient {
     }
 
     @Override
-    public String createContact(ContactCreateDtoRequest request) {
+    public ResponseEntity<String> createContact(ContactCreateDtoRequest request) {
         log.info("Criando contato no HubSpot...");
+        validateRateLimit();
+        contactService.createContact(request);
+        log.info("Contato criado com sucesso no HubSpot");
+        return ResponseEntity.ok("Contato criado com sucesso no HubSpot");
+    }
 
-        if (bucket.tryConsume(1)) {
-            contactService.createContact(request);
-            log.info("Contato criado com sucesso no HubSpot");
-            return "Contato criado com sucesso no HubSpot";
+    private void validateRateLimit() {
+        if (!rateLimitBucket.tryConsume(1)) {
+            throw new RateLimitsException("Limite de requisições excedido. Aguarde um minuto para continuar.");
         }
-        throw new RateLimitsException("Limite de requisições excedido. Aguarde um minuto para continuar.");
     }
 }

@@ -22,9 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<ApiError> handleGenericException(Exception ex) {
-        ApiError apiError = new ApiError(ex.getMessage(), "");
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+        return createErrorResponse(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
@@ -35,30 +33,27 @@ public class GlobalExceptionHandler {
             String fieldName = fieldError.getField().toString().replace("properties.", "");
             errorMessage.append(fieldName).append(" - ").append(fieldError.getDefaultMessage()).append(" / ");
         }
-        ApiError apiError = new ApiError(errorMessage.toString(), request.getRequestURI());
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+        return createErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
     }
 
     @ExceptionHandler({ServiceUnavailableException.class})
     protected ResponseEntity<ApiError> handleServiceUnavailableException(ServiceUnavailableException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(ex.getMessage(), request.getRequestURI());
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.SERVICE_UNAVAILABLE);
+        return createErrorResponse(ex.getMessage(), HttpStatus.SERVICE_UNAVAILABLE.value(), request.getRequestURI());
     }
 
     @ExceptionHandler({RateLimitsException.class})
     protected ResponseEntity<ApiError> handleRateLimitsException(RateLimitsException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(ex.getMessage(), request.getRequestURI());
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(apiError, HttpStatus.TOO_MANY_REQUESTS);
+        return createErrorResponse(ex.getMessage(), HttpStatus.TOO_MANY_REQUESTS.value(), request.getRequestURI());
     }
 
     @ExceptionHandler({HttpClientErrorException.class})
     protected ResponseEntity<ApiError> handleHttpClientErrorException(HttpClientErrorException ex, HttpServletRequest request) {
-        ApiError apiError = new ApiError(ex.getMessage(), request.getRequestURI());
-        log.error(ex.getMessage());
-        return new ResponseEntity<>(apiError, ex.getStatusCode());
+        return createErrorResponse(ex.getMessage(), ex.getStatusCode().value(), request.getRequestURI());
     }
 
+    private ResponseEntity<ApiError> createErrorResponse(String message, Integer status, String requestUri) {
+        ApiError apiError = new ApiError(message, requestUri);
+        log.error("Error occurred: {}", message);
+        return new ResponseEntity<>(apiError, HttpStatus.valueOf(status));
+    }
 }

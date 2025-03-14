@@ -29,7 +29,7 @@ public class AuthService {
     @Autowired
     AuthTokenDtoRequest authTokenRequest;
 
-    public String getAutenticationUrl() throws ServiceUnavailableException {
+    public String generateAuthenticationUrl() throws ServiceUnavailableException {
         String url = getAuthUrl() + "/authorize";
         url += "?client_id=" + authTokenRequest.getClientId();
         url += "&redirect_uri=" + authTokenRequest.getRedirectUri();
@@ -38,7 +38,7 @@ public class AuthService {
         return url;
     }
 
-    public void oauthCallback(String code) throws ServiceUnavailableException {
+    public void handleOauthCallback(String code) throws ServiceUnavailableException {
         String url = getApiUrl() + "/oauth/v1/token";
 
         HttpHeaders headers = new HttpHeaders();

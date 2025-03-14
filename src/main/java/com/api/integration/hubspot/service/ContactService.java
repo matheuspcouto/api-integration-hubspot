@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
@@ -50,6 +49,19 @@ public class ContactService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Authorization", "Bearer " + tokenService.getAccessToken());
 
+        request.setAssociations(createAssociations());
+
+        HttpEntity entity = new HttpEntity(request, headers);
+        new RestTemplate().exchange(
+                getUrlContacts(),
+                HttpMethod.POST,
+                entity,
+                String.class
+        );
+    }
+
+    // TODO: Método para criar a lista de associations necessária para a criação do contato
+    private List<Association> createAssociations() {
         // AssociationType
         ArrayList<AssociationType> associationTypes = new ArrayList<>();
         associationTypes.add(new AssociationType(AssociationCategory.HUBSPOT_DEFINED, 0));
@@ -64,14 +76,6 @@ public class ContactService {
         List<Association> associations = new ArrayList<>();
         associations.add(association);
 
-        request.setAssociations(associations);
-
-        HttpEntity entity = new HttpEntity(request, headers);
-        new RestTemplate().exchange(
-                getUrlContacts(),
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
+        return associations;
     }
 }
