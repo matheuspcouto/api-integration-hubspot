@@ -28,6 +28,6 @@ public class AuthController implements AuthClient {
         log.info("Gerando tokens de acesso ao Hubspot");
         authService.handleOauthCallback(code);
         log.info("Tokens de acesso gerados com sucesso");
-        return ResponseEntity.ok("<h1>Tokens de acesso gerados com sucesso. Agora você pode fechar esta pagina.</h1>");
+        return ResponseEntity.ok("<h1>Tokens de acesso gerados com sucesso. <br> Agora você pode fechar esta pagina e seguir os próximos passos.</h1>");
     }
 }
