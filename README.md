@@ -41,14 +41,13 @@ git clone https://github.com/matheuspcouto/api-integration-hubspot.git
 1. **Criar Conta no HubSpot**:
     - Acesse [HubSpot](https://www.hubspot.com/) e crie uma conta gratuita.
     - Após criar a conta, crie um aplicativo novo e defina os escopos necessários
-    - Defina o `redirectUri` como http://localhost:8080/oauth-callback.
-    - Obtenha as informações: `clientId`, `clientSecret`, `redirectUri` e `scope`.
-    - Substitua essas informações no arquivo `application.yml` no diretório `src/main/resources`
+    - Defina o `redirectUri` como http://localhost:8080/auth/callback.
+    - Obtenha as informações: `client_id`, `client_secret`, `scope` e `redirect_uri`.
 
    
 2. **Configurar o Arquivo application.yml**:
     - Abra o arquivo `application.yml` no diretório `src/main/resources`.
-    - Substitua os valores de `clientId`, `clientSecret` e `redirectUri` pelas informações obtidas anteriormente.
+    - Substitua os valores de `client_id`, `client_secret`, `scope` e `redirect_uri` pelas informações obtidas anteriormente.
 
 
 3. **Executar o Projeto**:

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Tag(name = "Auth - 1° Passo", description = "API de Autorizacao")
+@Tag(name = "Auth - 1° Passo", description = "API de Autenticação")
 public interface AuthClient {
 
     @PostMapping("/authenticate")
